@@ -6,10 +6,12 @@
     </b-list-group>
     <router-link class="btn btn-success small  mx-3" :to="{path: '/hello', params: {fromCard : test}}">Go to sou
     </router-link>
-
-    <div v-for="(item,key) in jsonPlaceHolderGetter" :key="key" class="list-item">
-      {{ item }}
+    <div class="list-group">
+      <div v-for="(item) in jsonPlaceHolderGetter" :key="item.id" class="list-group-item">
+        {{ item }}
+      </div>
     </div>
+
   </div>
 </template>
 
@@ -19,7 +21,7 @@ import {mapGetters, mapActions} from 'vuex'
 export default {
   name: "Card",
   computed: {
-    ...mapGetters(['globalBasketGetter,jsonPlaceHolderGetter'])
+    ...mapGetters(['globalBasketGetter','jsonPlaceHolderGetter'])
   },
   data() {
     return {
