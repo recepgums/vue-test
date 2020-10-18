@@ -1,58 +1,62 @@
 <template>
-  <div class="hello">
-
-    <input type="text" v-model="newInput" >
-    <button @click="emitNew">Collect</button>
-    <p>
-      this is new one
-    </p>
-    <br>
-    <input type="text" v-model="textBoxNew">
-    {{ this.customTextBoxNew }} - {{ firstGetter }} <br>
-
-    burası component state i {{ textBoxNew }}
-    <hr>
+  <div class="container bg-light py-3">
+    <div class="row">
+      <div class="col-4 border-right">
+        <input type="text" v-model="newInput">
+        <button @click="emitNew">Collect</button>
+        <p>
+          this is new one
+        </p>
+      </div>
+      <div class="col-4 border-right">
+        <input type="text" v-model="textBoxNew">
+        {{ this.customTextBoxNew }} - {{ firstGetter }} <br>
+        burası component state i {{ textBoxNew }}
+      </div>
+      <div class="col-4 ">
     <span :class="[isActive ? 'text-success' : 'text-danger']">
         <p>burada yeni bir şey deniyorum</p>
           <b-button :class="'btn btn-'+[!isActive ? 'success' : 'danger' ]" @click="changeTextColor">
             change text to button's color
           </b-button>
       </span>
-    <br>
-    amaç $store kullanmak-
-    <b>{{ doneTodosCount }}</b>
+      </div>
+    </div>
     <hr>
-    <ul class="text-center">
-      <li class="text-center" v-for="item in myObject" :key="item.name">
-        {{ item.name }} - {{ item.email }}
-      </li>
-    </ul>
-    <input @keyup.enter="addToObject" type="text" v-model="newObjectElement">
-    <button class="btn btn-info" @click="addToObject"> Ekle</button>
-    <hr>
-    Parent Component <br>
-    <Child :test="myObject"/>
+    <div class="row">
+      <div class="col-4">
+        amaç $store kullanmak <br>
+        <b>{{ doneTodosCount }}</b>
+      </div>
+      <div class="col-4">
+        <ul class="text-center">
+          <li class="text-left" v-for="item in myObject" :key="item.name">
+            {{ item.name }} - {{ item.email }}
+          </li>
+        </ul>
+      </div>
+      <div class="col-4">
+        <input class="form-control" @keyup.enter="addToObject" type="text" v-model="newObjectElement">
+        <button class="btn btn-info" @click="addToObject"> Ekle</button>
+      </div>
+    </div>
 
     <hr>
-    <div class="container" align="left">
-      <h3>Emit example</h3>
-      <br>
-      <input type="text" >
+    <div class="text-center align-content-center align-items-center">
+      Parent Component <br>
+      <Child :test="myObject" @emitToParent="addNewElementByChild"/>
     </div>
   </div>
 </template>
-
 <script>
 import {mapGetters} from 'vuex'
 import Child from './Child'
-
-
 export default {
   name: 'New',
   components: {
     Child
   },
-  props:['helloInput'],
+  props: ['helloInput'],
   data() {
     return {
       textBoxNew: "aaaaaaaa",
@@ -65,7 +69,7 @@ export default {
         {name: 'rece232p', email: 'rec321321ep@rece32p.com'},
       ],
       newObjectElement: '',
-      newInput:''
+      newInput: ''
     }
   },
   mounted() {
@@ -76,9 +80,7 @@ export default {
     doneTodosCount() {
       return this.$store.getters.secondGetter
     }
-
   },
-
   methods: {
     changeTextColor() {
       this.isActive = !this.isActive
@@ -90,8 +92,13 @@ export default {
       });
       this.newObjectElement = ''
     },
-    emitNew(){
-    this.$emit('emitNew',this.helloInput+" "+this.newInput)
+    emitNew() {
+      this.$emit('emitNew', this.helloInput + " " + this.newInput)
+      this.$swal('kelimler toplandı');
+      this.newInput = ''
+    },
+    addNewElementByChild(newElem){
+      this.myObject.push(newElem)
     }
   },
 }
